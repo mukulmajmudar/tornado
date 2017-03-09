@@ -345,7 +345,12 @@ TracebackFuture = Future
 if futures is None:
     FUTURES = Future  # type: typing.Union[type, typing.Tuple[type, ...]]
 else:
-    FUTURES = (futures.Future, Future)
+    try:
+        import asyncio
+    except ImportError:
+        FUTURES = (futures.Future, Future)
+    else:
+        FUTURES = (futures.Future, Future, asyncio.Future)
 
 
 def is_future(x):
